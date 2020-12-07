@@ -1,0 +1,4034 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Importing libraries"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "import numpy as np\n",
+    "import pandas as pd \n",
+    "import seaborn as sns\n",
+    "import matplotlib.pyplot as plt\n",
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')\n",
+    "\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Importing Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_train=pd.read_csv('./data/train.csv')\n",
+    "df_test=pd.read_csv('./data/test.csv')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Having a glimpse at Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 1460 entries, 0 to 1459\n",
+      "Data columns (total 81 columns):\n",
+      "Id               1460 non-null int64\n",
+      "MSSubClass       1460 non-null int64\n",
+      "MSZoning         1460 non-null object\n",
+      "LotFrontage      1201 non-null float64\n",
+      "LotArea          1460 non-null int64\n",
+      "Street           1460 non-null object\n",
+      "Alley            91 non-null object\n",
+      "LotShape         1460 non-null object\n",
+      "LandContour      1460 non-null object\n",
+      "Utilities        1460 non-null object\n",
+      "LotConfig        1460 non-null object\n",
+      "LandSlope        1460 non-null object\n",
+      "Neighborhood     1460 non-null object\n",
+      "Condition1       1460 non-null object\n",
+      "Condition2       1460 non-null object\n",
+      "BldgType         1460 non-null object\n",
+      "HouseStyle       1460 non-null object\n",
+      "OverallQual      1460 non-null int64\n",
+      "OverallCond      1460 non-null int64\n",
+      "YearBuilt        1460 non-null int64\n",
+      "YearRemodAdd     1460 non-null int64\n",
+      "RoofStyle        1460 non-null object\n",
+      "RoofMatl         1460 non-null object\n",
+      "Exterior1st      1460 non-null object\n",
+      "Exterior2nd      1460 non-null object\n",
+      "MasVnrType       1452 non-null object\n",
+      "MasVnrArea       1452 non-null float64\n",
+      "ExterQual        1460 non-null object\n",
+      "ExterCond        1460 non-null object\n",
+      "Foundation       1460 non-null object\n",
+      "BsmtQual         1423 non-null object\n",
+      "BsmtCond         1423 non-null object\n",
+      "BsmtExposure     1422 non-null object\n",
+      "BsmtFinType1     1423 non-null object\n",
+      "BsmtFinSF1       1460 non-null int64\n",
+      "BsmtFinType2     1422 non-null object\n",
+      "BsmtFinSF2       1460 non-null int64\n",
+      "BsmtUnfSF        1460 non-null int64\n",
+      "TotalBsmtSF      1460 non-null int64\n",
+      "Heating          1460 non-null object\n",
+      "HeatingQC        1460 non-null object\n",
+      "CentralAir       1460 non-null object\n",
+      "Electrical       1459 non-null object\n",
+      "1stFlrSF         1460 non-null int64\n",
+      "2ndFlrSF         1460 non-null int64\n",
+      "LowQualFinSF     1460 non-null int64\n",
+      "GrLivArea        1460 non-null int64\n",
+      "BsmtFullBath     1460 non-null int64\n",
+      "BsmtHalfBath     1460 non-null int64\n",
+      "FullBath         1460 non-null int64\n",
+      "HalfBath         1460 non-null int64\n",
+      "BedroomAbvGr     1460 non-null int64\n",
+      "KitchenAbvGr     1460 non-null int64\n",
+      "KitchenQual      1460 non-null object\n",
+      "TotRmsAbvGrd     1460 non-null int64\n",
+      "Functional       1460 non-null object\n",
+      "Fireplaces       1460 non-null int64\n",
+      "FireplaceQu      770 non-null object\n",
+      "GarageType       1379 non-null object\n",
+      "GarageYrBlt      1379 non-null float64\n",
+      "GarageFinish     1379 non-null object\n",
+      "GarageCars       1460 non-null int64\n",
+      "GarageArea       1460 non-null int64\n",
+      "GarageQual       1379 non-null object\n",
+      "GarageCond       1379 non-null object\n",
+      "PavedDrive       1460 non-null object\n",
+      "WoodDeckSF       1460 non-null int64\n",
+      "OpenPorchSF      1460 non-null int64\n",
+      "EnclosedPorch    1460 non-null int64\n",
+      "3SsnPorch        1460 non-null int64\n",
+      "ScreenPorch      1460 non-null int64\n",
+      "PoolArea         1460 non-null int64\n",
+      "PoolQC           7 non-null object\n",
+      "Fence            281 non-null object\n",
+      "MiscFeature      54 non-null object\n",
+      "MiscVal          1460 non-null int64\n",
+      "MoSold           1460 non-null int64\n",
+      "YrSold           1460 non-null int64\n",
+      "SaleType         1460 non-null object\n",
+      "SaleCondition    1460 non-null object\n",
+      "SalePrice        1460 non-null int64\n",
+      "dtypes: float64(3), int64(35), object(43)\n",
+      "memory usage: 924.0+ KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_train.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1460, 81)"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_train.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.axes._subplots.AxesSubplot at 0x1119ae5c0>"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "sns.distplot(df_train['SalePrice'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Skewness: 1.882876\n",
+      "Kurtosis: 6.536282\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Skewness: %f\" % df_train['SalePrice'].skew())\n",
+    "print(\"Kurtosis: %f\" % df_train['SalePrice'].kurt())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_train['SalePrice']= np.log(df_train['SalePrice'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.axes._subplots.AxesSubplot at 0x1a24dc6128>"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "sns.distplot(df_train['SalePrice'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Checking for the null values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Id                  0\n",
+       "MSSubClass          0\n",
+       "MSZoning            0\n",
+       "LotFrontage       259\n",
+       "LotArea             0\n",
+       "Street              0\n",
+       "Alley            1369\n",
+       "LotShape            0\n",
+       "LandContour         0\n",
+       "Utilities           0\n",
+       "LotConfig           0\n",
+       "LandSlope           0\n",
+       "Neighborhood        0\n",
+       "Condition1          0\n",
+       "Condition2          0\n",
+       "BldgType            0\n",
+       "HouseStyle          0\n",
+       "OverallQual         0\n",
+       "OverallCond         0\n",
+       "YearBuilt           0\n",
+       "YearRemodAdd        0\n",
+       "RoofStyle           0\n",
+       "RoofMatl            0\n",
+       "Exterior1st         0\n",
+       "Exterior2nd         0\n",
+       "MasVnrType          8\n",
+       "MasVnrArea          8\n",
+       "ExterQual           0\n",
+       "ExterCond           0\n",
+       "Foundation          0\n",
+       "                 ... \n",
+       "BedroomAbvGr        0\n",
+       "KitchenAbvGr        0\n",
+       "KitchenQual         0\n",
+       "TotRmsAbvGrd        0\n",
+       "Functional          0\n",
+       "Fireplaces          0\n",
+       "FireplaceQu       690\n",
+       "GarageType         81\n",
+       "GarageYrBlt        81\n",
+       "GarageFinish       81\n",
+       "GarageCars          0\n",
+       "GarageArea          0\n",
+       "GarageQual         81\n",
+       "GarageCond         81\n",
+       "PavedDrive          0\n",
+       "WoodDeckSF          0\n",
+       "OpenPorchSF         0\n",
+       "EnclosedPorch       0\n",
+       "3SsnPorch           0\n",
+       "ScreenPorch         0\n",
+       "PoolArea            0\n",
+       "PoolQC           1453\n",
+       "Fence            1179\n",
+       "MiscFeature      1406\n",
+       "MiscVal             0\n",
+       "MoSold              0\n",
+       "YrSold              0\n",
+       "SaleType            0\n",
+       "SaleCondition       0\n",
+       "SalePrice           0\n",
+       "Length: 81, dtype: int64"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df_train.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nullRate=df_train.isnull().sum()/len(df_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Id               0.000000\n",
+       "MSSubClass       0.000000\n",
+       "MSZoning         0.000000\n",
+       "LotFrontage      0.177397\n",
+       "LotArea          0.000000\n",
+       "Street           0.000000\n",
+       "Alley            0.937671\n",
+       "LotShape         0.000000\n",
+       "LandContour      0.000000\n",
+       "Utilities        0.000000\n",
+       "LotConfig        0.000000\n",
+       "LandSlope        0.000000\n",
+       "Neighborhood     0.000000\n",
+       "Condition1       0.000000\n",
+       "Condition2       0.000000\n",
+       "BldgType         0.000000\n",
+       "HouseStyle       0.000000\n",
+       "OverallQual      0.000000\n",
+       "OverallCond      0.000000\n",
+       "YearBuilt        0.000000\n",
+       "YearRemodAdd     0.000000\n",
+       "RoofStyle        0.000000\n",
+       "RoofMatl         0.000000\n",
+       "Exterior1st      0.000000\n",
+       "Exterior2nd      0.000000\n",
+       "MasVnrType       0.005479\n",
+       "MasVnrArea       0.005479\n",
+       "ExterQual        0.000000\n",
+       "ExterCond        0.000000\n",
+       "Foundation       0.000000\n",
+       "                   ...   \n",
+       "BedroomAbvGr     0.000000\n",
+       "KitchenAbvGr     0.000000\n",
+       "KitchenQual      0.000000\n",
+       "TotRmsAbvGrd     0.000000\n",
+       "Functional       0.000000\n",
+       "Fireplaces       0.000000\n",
+       "FireplaceQu      0.472603\n",
+       "GarageType       0.055479\n",
+       "GarageYrBlt      0.055479\n",
+       "GarageFinish     0.055479\n",
+       "GarageCars       0.000000\n",
+       "GarageArea       0.000000\n",
+       "GarageQual       0.055479\n",
+       "GarageCond       0.055479\n",
+       "PavedDrive       0.000000\n",
+       "WoodDeckSF       0.000000\n",
+       "OpenPorchSF      0.000000\n",
+       "EnclosedPorch    0.000000\n",
+       "3SsnPorch        0.000000\n",
+       "ScreenPorch      0.000000\n",
+       "PoolArea         0.000000\n",
+       "PoolQC           0.995205\n",
+       "Fence            0.807534\n",
+       "MiscFeature      0.963014\n",
+       "MiscVal          0.000000\n",
+       "MoSold           0.000000\n",
+       "YrSold           0.000000\n",
+       "SaleType         0.000000\n",
+       "SaleCondition    0.000000\n",
+       "SalePrice        0.000000\n",
+       "Length: 81, dtype: float64"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "nullRate"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nullRate=nullRate[nullRate>0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "PoolQC          0.995205\n",
+       "MiscFeature     0.963014\n",
+       "Alley           0.937671\n",
+       "Fence           0.807534\n",
+       "FireplaceQu     0.472603\n",
+       "LotFrontage     0.177397\n",
+       "GarageYrBlt     0.055479\n",
+       "GarageType      0.055479\n",
+       "GarageFinish    0.055479\n",
+       "GarageQual      0.055479\n",
+       "GarageCond      0.055479\n",
+       "BsmtFinType2    0.026027\n",
+       "BsmtExposure    0.026027\n",
+       "BsmtFinType1    0.025342\n",
+       "BsmtCond        0.025342\n",
+       "BsmtQual        0.025342\n",
+       "MasVnrArea      0.005479\n",
+       "MasVnrType      0.005479\n",
+       "Electrical      0.000685\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "nullRate.sort_values(ascending=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "corr=df_train.corr()['SalePrice']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "HalfBath        0.313982\n",
+       "2ndFlrSF        0.319300\n",
+       "OpenPorchSF     0.321053\n",
+       "WoodDeckSF      0.334135\n",
+       "LotFrontage     0.355878\n",
+       "BsmtFinSF1      0.372023\n",
+       "MasVnrArea      0.430809\n",
+       "Fireplaces      0.489449\n",
+       "TotRmsAbvGrd    0.534422\n",
+       "GarageYrBlt     0.541073\n",
+       "YearRemodAdd    0.565608\n",
+       "YearBuilt       0.586570\n",
+       "FullBath        0.594771\n",
+       "1stFlrSF        0.596981\n",
+       "TotalBsmtSF     0.612134\n",
+       "GarageArea      0.650888\n",
+       "GarageCars      0.680625\n",
+       "GrLivArea       0.700927\n",
+       "OverallQual     0.817184\n",
+       "SalePrice       1.000000\n",
+       "Name: SalePrice, dtype: float64"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "corr[corr>0.3].sort_values()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Delete the corresponding variable(missing > 15%)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train_data=df_train"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# train_data=train_data.drop(nullRate[nullRate>0.85].index,1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1460, 81)"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_data.shape"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Filling missing values"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Filling numerical values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Id                 730.500000\n",
+       "MSSubClass          56.897260\n",
+       "LotFrontage         70.049958\n",
+       "LotArea          10516.828082\n",
+       "OverallQual          6.099315\n",
+       "OverallCond          5.575342\n",
+       "YearBuilt         1971.267808\n",
+       "YearRemodAdd      1984.865753\n",
+       "MasVnrArea         103.685262\n",
+       "BsmtFinSF1         443.639726\n",
+       "BsmtFinSF2          46.549315\n",
+       "BsmtUnfSF          567.240411\n",
+       "TotalBsmtSF       1057.429452\n",
+       "1stFlrSF          1162.626712\n",
+       "2ndFlrSF           346.992466\n",
+       "LowQualFinSF         5.844521\n",
+       "GrLivArea         1515.463699\n",
+       "BsmtFullBath         0.425342\n",
+       "BsmtHalfBath         0.057534\n",
+       "FullBath             1.565068\n",
+       "HalfBath             0.382877\n",
+       "BedroomAbvGr         2.866438\n",
+       "KitchenAbvGr         1.046575\n",
+       "TotRmsAbvGrd         6.517808\n",
+       "Fireplaces           0.613014\n",
+       "GarageYrBlt       1978.506164\n",
+       "GarageCars           1.767123\n",
+       "GarageArea         472.980137\n",
+       "WoodDeckSF          94.244521\n",
+       "OpenPorchSF         46.660274\n",
+       "EnclosedPorch       21.954110\n",
+       "3SsnPorch            3.409589\n",
+       "ScreenPorch         15.060959\n",
+       "PoolArea             2.758904\n",
+       "MiscVal             43.489041\n",
+       "MoSold               6.321918\n",
+       "YrSold            2007.815753\n",
+       "SalePrice           12.024051\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_data.mean()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Id                730.500000\n",
+       "MSSubClass         50.000000\n",
+       "LotFrontage        69.000000\n",
+       "LotArea          9478.500000\n",
+       "OverallQual         6.000000\n",
+       "OverallCond         5.000000\n",
+       "YearBuilt        1973.000000\n",
+       "YearRemodAdd     1994.000000\n",
+       "MasVnrArea          0.000000\n",
+       "BsmtFinSF1        383.500000\n",
+       "BsmtFinSF2          0.000000\n",
+       "BsmtUnfSF         477.500000\n",
+       "TotalBsmtSF       991.500000\n",
+       "1stFlrSF         1087.000000\n",
+       "2ndFlrSF            0.000000\n",
+       "LowQualFinSF        0.000000\n",
+       "GrLivArea        1464.000000\n",
+       "BsmtFullBath        0.000000\n",
+       "BsmtHalfBath        0.000000\n",
+       "FullBath            2.000000\n",
+       "HalfBath            0.000000\n",
+       "BedroomAbvGr        3.000000\n",
+       "KitchenAbvGr        1.000000\n",
+       "TotRmsAbvGrd        6.000000\n",
+       "Fireplaces          1.000000\n",
+       "GarageYrBlt      1980.000000\n",
+       "GarageCars          2.000000\n",
+       "GarageArea        480.000000\n",
+       "WoodDeckSF          0.000000\n",
+       "OpenPorchSF        25.000000\n",
+       "EnclosedPorch       0.000000\n",
+       "3SsnPorch           0.000000\n",
+       "ScreenPorch         0.000000\n",
+       "PoolArea            0.000000\n",
+       "MiscVal             0.000000\n",
+       "MoSold              6.000000\n",
+       "YrSold           2008.000000\n",
+       "SalePrice          12.001505\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_data.median()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train_data = train_data.fillna(train_data.median())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tmp=train_data.isnull().sum().sort_values()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Electrical         1\n",
+       "MasVnrType         8\n",
+       "BsmtQual          37\n",
+       "BsmtCond          37\n",
+       "BsmtFinType1      37\n",
+       "BsmtFinType2      38\n",
+       "BsmtExposure      38\n",
+       "GarageQual        81\n",
+       "GarageFinish      81\n",
+       "GarageCond        81\n",
+       "GarageType        81\n",
+       "FireplaceQu      690\n",
+       "Fence           1179\n",
+       "Alley           1369\n",
+       "MiscFeature     1406\n",
+       "PoolQC          1453\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tmp[tmp>0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(16,)"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tmp[tmp>0].shape"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Filling categorial values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train_data = train_data.fillna('None')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "tmp = train_data.isnull().sum().sort_values()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(0,)"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tmp[tmp>0].shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Id</th>\n",
+       "      <th>MSSubClass</th>\n",
+       "      <th>MSZoning</th>\n",
+       "      <th>LotFrontage</th>\n",
+       "      <th>LotArea</th>\n",
+       "      <th>Street</th>\n",
+       "      <th>Alley</th>\n",
+       "      <th>LotShape</th>\n",
+       "      <th>LandContour</th>\n",
+       "      <th>Utilities</th>\n",
+       "      <th>...</th>\n",
+       "      <th>PoolArea</th>\n",
+       "      <th>PoolQC</th>\n",
+       "      <th>Fence</th>\n",
+       "      <th>MiscFeature</th>\n",
+       "      <th>MiscVal</th>\n",
+       "      <th>MoSold</th>\n",
+       "      <th>YrSold</th>\n",
+       "      <th>SaleType</th>\n",
+       "      <th>SaleCondition</th>\n",
+       "      <th>SalePrice</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>60</td>\n",
+       "      <td>RL</td>\n",
+       "      <td>65.0</td>\n",
+       "      <td>8450</td>\n",
+       "      <td>Pave</td>\n",
+       "      <td>None</td>\n",
+       "      <td>Reg</td>\n",
+       "      <td>Lvl</td>\n",
+       "      <td>AllPub</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>WD</td>\n",
+       "      <td>Normal</td>\n",
+       "      <td>12.247694</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>20</td>\n",
+       "      <td>RL</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>9600</td>\n",
+       "      <td>Pave</td>\n",
+       "      <td>None</td>\n",
+       "      <td>Reg</td>\n",
+       "      <td>Lvl</td>\n",
+       "      <td>AllPub</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>0</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>WD</td>\n",
+       "      <td>Normal</td>\n",
+       "      <td>12.109011</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>60</td>\n",
+       "      <td>RL</td>\n",
+       "      <td>68.0</td>\n",
+       "      <td>11250</td>\n",
+       "      <td>Pave</td>\n",
+       "      <td>None</td>\n",
+       "      <td>IR1</td>\n",
+       "      <td>Lvl</td>\n",
+       "      <td>AllPub</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>0</td>\n",
+       "      <td>9</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>WD</td>\n",
+       "      <td>Normal</td>\n",
+       "      <td>12.317167</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>70</td>\n",
+       "      <td>RL</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>9550</td>\n",
+       "      <td>Pave</td>\n",
+       "      <td>None</td>\n",
+       "      <td>IR1</td>\n",
+       "      <td>Lvl</td>\n",
+       "      <td>AllPub</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>0</td>\n",
+       "      <td>2</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>WD</td>\n",
+       "      <td>Abnorml</td>\n",
+       "      <td>11.849398</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>60</td>\n",
+       "      <td>RL</td>\n",
+       "      <td>84.0</td>\n",
+       "      <td>14260</td>\n",
+       "      <td>Pave</td>\n",
+       "      <td>None</td>\n",
+       "      <td>IR1</td>\n",
+       "      <td>Lvl</td>\n",
+       "      <td>AllPub</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>None</td>\n",
+       "      <td>0</td>\n",
+       "      <td>12</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>WD</td>\n",
+       "      <td>Normal</td>\n",
+       "      <td>12.429216</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>5 rows × 81 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   Id  MSSubClass MSZoning  LotFrontage  LotArea Street Alley LotShape  \\\n",
+       "0   1          60       RL         65.0     8450   Pave  None      Reg   \n",
+       "1   2          20       RL         80.0     9600   Pave  None      Reg   \n",
+       "2   3          60       RL         68.0    11250   Pave  None      IR1   \n",
+       "3   4          70       RL         60.0     9550   Pave  None      IR1   \n",
+       "4   5          60       RL         84.0    14260   Pave  None      IR1   \n",
+       "\n",
+       "  LandContour Utilities  ... PoolArea PoolQC Fence MiscFeature MiscVal MoSold  \\\n",
+       "0         Lvl    AllPub  ...        0   None  None        None       0      2   \n",
+       "1         Lvl    AllPub  ...        0   None  None        None       0      5   \n",
+       "2         Lvl    AllPub  ...        0   None  None        None       0      9   \n",
+       "3         Lvl    AllPub  ...        0   None  None        None       0      2   \n",
+       "4         Lvl    AllPub  ...        0   None  None        None       0     12   \n",
+       "\n",
+       "  YrSold  SaleType  SaleCondition  SalePrice  \n",
+       "0   2008        WD         Normal  12.247694  \n",
+       "1   2007        WD         Normal  12.109011  \n",
+       "2   2008        WD         Normal  12.317167  \n",
+       "3   2006        WD        Abnorml  11.849398  \n",
+       "4   2008        WD         Normal  12.429216  \n",
+       "\n",
+       "[5 rows x 81 columns]"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "train_data.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Training Set"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = pd.get_dummies(train_data).reset_index(drop=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1460, 305)"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Id</th>\n",
+       "      <th>MSSubClass</th>\n",
+       "      <th>LotFrontage</th>\n",
+       "      <th>LotArea</th>\n",
+       "      <th>OverallQual</th>\n",
+       "      <th>OverallCond</th>\n",
+       "      <th>YearBuilt</th>\n",
+       "      <th>YearRemodAdd</th>\n",
+       "      <th>MasVnrArea</th>\n",
+       "      <th>BsmtFinSF1</th>\n",
+       "      <th>...</th>\n",
+       "      <th>SaleType_ConLw</th>\n",
+       "      <th>SaleType_New</th>\n",
+       "      <th>SaleType_Oth</th>\n",
+       "      <th>SaleType_WD</th>\n",
+       "      <th>SaleCondition_Abnorml</th>\n",
+       "      <th>SaleCondition_AdjLand</th>\n",
+       "      <th>SaleCondition_Alloca</th>\n",
+       "      <th>SaleCondition_Family</th>\n",
+       "      <th>SaleCondition_Normal</th>\n",
+       "      <th>SaleCondition_Partial</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1</td>\n",
+       "      <td>60</td>\n",
+       "      <td>65.0</td>\n",
+       "      <td>8450</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2003</td>\n",
+       "      <td>2003</td>\n",
+       "      <td>196.0</td>\n",
+       "      <td>706</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>2</td>\n",
+       "      <td>20</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>9600</td>\n",
+       "      <td>6</td>\n",
+       "      <td>8</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>978</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>3</td>\n",
+       "      <td>60</td>\n",
+       "      <td>68.0</td>\n",
+       "      <td>11250</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2001</td>\n",
+       "      <td>2002</td>\n",
+       "      <td>162.0</td>\n",
+       "      <td>486</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>4</td>\n",
+       "      <td>70</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>9550</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1915</td>\n",
+       "      <td>1970</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>216</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>5</td>\n",
+       "      <td>60</td>\n",
+       "      <td>84.0</td>\n",
+       "      <td>14260</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>350.0</td>\n",
+       "      <td>655</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>6</td>\n",
+       "      <td>50</td>\n",
+       "      <td>85.0</td>\n",
+       "      <td>14115</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1993</td>\n",
+       "      <td>1995</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>732</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>7</td>\n",
+       "      <td>20</td>\n",
+       "      <td>75.0</td>\n",
+       "      <td>10084</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>186.0</td>\n",
+       "      <td>1369</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>8</td>\n",
+       "      <td>60</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>10382</td>\n",
+       "      <td>7</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1973</td>\n",
+       "      <td>1973</td>\n",
+       "      <td>240.0</td>\n",
+       "      <td>859</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>9</td>\n",
+       "      <td>50</td>\n",
+       "      <td>51.0</td>\n",
+       "      <td>6120</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1931</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>10</td>\n",
+       "      <td>190</td>\n",
+       "      <td>50.0</td>\n",
+       "      <td>7420</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1939</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>851</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>11</td>\n",
+       "      <td>20</td>\n",
+       "      <td>70.0</td>\n",
+       "      <td>11200</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1965</td>\n",
+       "      <td>1965</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>906</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>12</td>\n",
+       "      <td>60</td>\n",
+       "      <td>85.0</td>\n",
+       "      <td>11924</td>\n",
+       "      <td>9</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>286.0</td>\n",
+       "      <td>998</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>13</td>\n",
+       "      <td>20</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>12968</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1962</td>\n",
+       "      <td>1962</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>737</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13</th>\n",
+       "      <td>14</td>\n",
+       "      <td>20</td>\n",
+       "      <td>91.0</td>\n",
+       "      <td>10652</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>306.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>15</td>\n",
+       "      <td>20</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>10920</td>\n",
+       "      <td>6</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1960</td>\n",
+       "      <td>1960</td>\n",
+       "      <td>212.0</td>\n",
+       "      <td>733</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>15</th>\n",
+       "      <td>16</td>\n",
+       "      <td>45</td>\n",
+       "      <td>51.0</td>\n",
+       "      <td>6120</td>\n",
+       "      <td>7</td>\n",
+       "      <td>8</td>\n",
+       "      <td>1929</td>\n",
+       "      <td>2001</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>16</th>\n",
+       "      <td>17</td>\n",
+       "      <td>20</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>11241</td>\n",
+       "      <td>6</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1970</td>\n",
+       "      <td>1970</td>\n",
+       "      <td>180.0</td>\n",
+       "      <td>578</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>17</th>\n",
+       "      <td>18</td>\n",
+       "      <td>90</td>\n",
+       "      <td>72.0</td>\n",
+       "      <td>10791</td>\n",
+       "      <td>4</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1967</td>\n",
+       "      <td>1967</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>18</th>\n",
+       "      <td>19</td>\n",
+       "      <td>20</td>\n",
+       "      <td>66.0</td>\n",
+       "      <td>13695</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>646</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>19</th>\n",
+       "      <td>20</td>\n",
+       "      <td>20</td>\n",
+       "      <td>70.0</td>\n",
+       "      <td>7560</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1958</td>\n",
+       "      <td>1965</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>504</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>20</th>\n",
+       "      <td>21</td>\n",
+       "      <td>60</td>\n",
+       "      <td>101.0</td>\n",
+       "      <td>14215</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>380.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>21</th>\n",
+       "      <td>22</td>\n",
+       "      <td>45</td>\n",
+       "      <td>57.0</td>\n",
+       "      <td>7449</td>\n",
+       "      <td>7</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1930</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>22</th>\n",
+       "      <td>23</td>\n",
+       "      <td>20</td>\n",
+       "      <td>75.0</td>\n",
+       "      <td>9742</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2002</td>\n",
+       "      <td>2002</td>\n",
+       "      <td>281.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>23</th>\n",
+       "      <td>24</td>\n",
+       "      <td>120</td>\n",
+       "      <td>44.0</td>\n",
+       "      <td>4224</td>\n",
+       "      <td>5</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>840</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>24</th>\n",
+       "      <td>25</td>\n",
+       "      <td>20</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>8246</td>\n",
+       "      <td>5</td>\n",
+       "      <td>8</td>\n",
+       "      <td>1968</td>\n",
+       "      <td>2001</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>188</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25</th>\n",
+       "      <td>26</td>\n",
+       "      <td>20</td>\n",
+       "      <td>110.0</td>\n",
+       "      <td>14230</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>640.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>26</th>\n",
+       "      <td>27</td>\n",
+       "      <td>20</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>7200</td>\n",
+       "      <td>5</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1951</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>234</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>27</th>\n",
+       "      <td>28</td>\n",
+       "      <td>20</td>\n",
+       "      <td>98.0</td>\n",
+       "      <td>11478</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>200.0</td>\n",
+       "      <td>1218</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>28</th>\n",
+       "      <td>29</td>\n",
+       "      <td>20</td>\n",
+       "      <td>47.0</td>\n",
+       "      <td>16321</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1957</td>\n",
+       "      <td>1997</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>1277</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>29</th>\n",
+       "      <td>30</td>\n",
+       "      <td>30</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>6324</td>\n",
+       "      <td>4</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1927</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1430</th>\n",
+       "      <td>1431</td>\n",
+       "      <td>60</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>21930</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1431</th>\n",
+       "      <td>1432</td>\n",
+       "      <td>120</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>4928</td>\n",
+       "      <td>6</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>1976</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>958</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1432</th>\n",
+       "      <td>1433</td>\n",
+       "      <td>30</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>10800</td>\n",
+       "      <td>4</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1927</td>\n",
+       "      <td>2007</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1433</th>\n",
+       "      <td>1434</td>\n",
+       "      <td>60</td>\n",
+       "      <td>93.0</td>\n",
+       "      <td>10261</td>\n",
+       "      <td>6</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>318.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1434</th>\n",
+       "      <td>1435</td>\n",
+       "      <td>20</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>17400</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1977</td>\n",
+       "      <td>1977</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>936</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1435</th>\n",
+       "      <td>1436</td>\n",
+       "      <td>20</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>8400</td>\n",
+       "      <td>6</td>\n",
+       "      <td>9</td>\n",
+       "      <td>1962</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>237.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1436</th>\n",
+       "      <td>1437</td>\n",
+       "      <td>20</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>9000</td>\n",
+       "      <td>4</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1971</td>\n",
+       "      <td>1971</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>616</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1437</th>\n",
+       "      <td>1438</td>\n",
+       "      <td>20</td>\n",
+       "      <td>96.0</td>\n",
+       "      <td>12444</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>426.0</td>\n",
+       "      <td>1336</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1438</th>\n",
+       "      <td>1439</td>\n",
+       "      <td>20</td>\n",
+       "      <td>90.0</td>\n",
+       "      <td>7407</td>\n",
+       "      <td>6</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1957</td>\n",
+       "      <td>1996</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>600</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1439</th>\n",
+       "      <td>1440</td>\n",
+       "      <td>60</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>11584</td>\n",
+       "      <td>7</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1979</td>\n",
+       "      <td>1979</td>\n",
+       "      <td>96.0</td>\n",
+       "      <td>315</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1440</th>\n",
+       "      <td>1441</td>\n",
+       "      <td>70</td>\n",
+       "      <td>79.0</td>\n",
+       "      <td>11526</td>\n",
+       "      <td>6</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1922</td>\n",
+       "      <td>1994</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1441</th>\n",
+       "      <td>1442</td>\n",
+       "      <td>120</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>4426</td>\n",
+       "      <td>6</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>147.0</td>\n",
+       "      <td>697</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1442</th>\n",
+       "      <td>1443</td>\n",
+       "      <td>60</td>\n",
+       "      <td>85.0</td>\n",
+       "      <td>11003</td>\n",
+       "      <td>10</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>160.0</td>\n",
+       "      <td>765</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1443</th>\n",
+       "      <td>1444</td>\n",
+       "      <td>30</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>8854</td>\n",
+       "      <td>6</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1916</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1444</th>\n",
+       "      <td>1445</td>\n",
+       "      <td>20</td>\n",
+       "      <td>63.0</td>\n",
+       "      <td>8500</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>106.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1445</th>\n",
+       "      <td>1446</td>\n",
+       "      <td>85</td>\n",
+       "      <td>70.0</td>\n",
+       "      <td>8400</td>\n",
+       "      <td>6</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1966</td>\n",
+       "      <td>1966</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>187</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1446</th>\n",
+       "      <td>1447</td>\n",
+       "      <td>20</td>\n",
+       "      <td>69.0</td>\n",
+       "      <td>26142</td>\n",
+       "      <td>5</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1962</td>\n",
+       "      <td>1962</td>\n",
+       "      <td>189.0</td>\n",
+       "      <td>593</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1447</th>\n",
+       "      <td>1448</td>\n",
+       "      <td>60</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>10000</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1995</td>\n",
+       "      <td>1996</td>\n",
+       "      <td>438.0</td>\n",
+       "      <td>1079</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1448</th>\n",
+       "      <td>1449</td>\n",
+       "      <td>50</td>\n",
+       "      <td>70.0</td>\n",
+       "      <td>11767</td>\n",
+       "      <td>4</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1910</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1449</th>\n",
+       "      <td>1450</td>\n",
+       "      <td>180</td>\n",
+       "      <td>21.0</td>\n",
+       "      <td>1533</td>\n",
+       "      <td>5</td>\n",
+       "      <td>7</td>\n",
+       "      <td>1970</td>\n",
+       "      <td>1970</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>553</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1450</th>\n",
+       "      <td>1451</td>\n",
+       "      <td>90</td>\n",
+       "      <td>60.0</td>\n",
+       "      <td>9000</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1974</td>\n",
+       "      <td>1974</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1451</th>\n",
+       "      <td>1452</td>\n",
+       "      <td>20</td>\n",
+       "      <td>78.0</td>\n",
+       "      <td>9262</td>\n",
+       "      <td>8</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2008</td>\n",
+       "      <td>2009</td>\n",
+       "      <td>194.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1452</th>\n",
+       "      <td>1453</td>\n",
+       "      <td>180</td>\n",
+       "      <td>35.0</td>\n",
+       "      <td>3675</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>80.0</td>\n",
+       "      <td>547</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1453</th>\n",
+       "      <td>1454</td>\n",
+       "      <td>20</td>\n",
+       "      <td>90.0</td>\n",
+       "      <td>17217</td>\n",
+       "      <td>5</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1454</th>\n",
+       "      <td>1455</td>\n",
+       "      <td>20</td>\n",
+       "      <td>62.0</td>\n",
+       "      <td>7500</td>\n",
+       "      <td>7</td>\n",
+       "      <td>5</td>\n",
+       "      <td>2004</td>\n",
+       "      <td>2005</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>410</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1455</th>\n",
+       "      <td>1456</td>\n",
+       "      <td>60</td>\n",
+       "      <td>62.0</td>\n",
+       "      <td>7917</td>\n",
+       "      <td>6</td>\n",
+       "      <td>5</td>\n",
+       "      <td>1999</td>\n",
+       "      <td>2000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1456</th>\n",
+       "      <td>1457</td>\n",
+       "      <td>20</td>\n",
+       "      <td>85.0</td>\n",
+       "      <td>13175</td>\n",
+       "      <td>6</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1978</td>\n",
+       "      <td>1988</td>\n",
+       "      <td>119.0</td>\n",
+       "      <td>790</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1457</th>\n",
+       "      <td>1458</td>\n",
+       "      <td>70</td>\n",
+       "      <td>66.0</td>\n",
+       "      <td>9042</td>\n",
+       "      <td>7</td>\n",
+       "      <td>9</td>\n",
+       "      <td>1941</td>\n",
+       "      <td>2006</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>275</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1458</th>\n",
+       "      <td>1459</td>\n",
+       "      <td>20</td>\n",
+       "      <td>68.0</td>\n",
+       "      <td>9717</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1950</td>\n",
+       "      <td>1996</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>49</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1459</th>\n",
+       "      <td>1460</td>\n",
+       "      <td>20</td>\n",
+       "      <td>75.0</td>\n",
+       "      <td>9937</td>\n",
+       "      <td>5</td>\n",
+       "      <td>6</td>\n",
+       "      <td>1965</td>\n",
+       "      <td>1965</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>830</td>\n",
+       "      <td>...</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>1460 rows × 305 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        Id  MSSubClass  LotFrontage  LotArea  OverallQual  OverallCond  \\\n",
+       "0        1          60         65.0     8450            7            5   \n",
+       "1        2          20         80.0     9600            6            8   \n",
+       "2        3          60         68.0    11250            7            5   \n",
+       "3        4          70         60.0     9550            7            5   \n",
+       "4        5          60         84.0    14260            8            5   \n",
+       "5        6          50         85.0    14115            5            5   \n",
+       "6        7          20         75.0    10084            8            5   \n",
+       "7        8          60         69.0    10382            7            6   \n",
+       "8        9          50         51.0     6120            7            5   \n",
+       "9       10         190         50.0     7420            5            6   \n",
+       "10      11          20         70.0    11200            5            5   \n",
+       "11      12          60         85.0    11924            9            5   \n",
+       "12      13          20         69.0    12968            5            6   \n",
+       "13      14          20         91.0    10652            7            5   \n",
+       "14      15          20         69.0    10920            6            5   \n",
+       "15      16          45         51.0     6120            7            8   \n",
+       "16      17          20         69.0    11241            6            7   \n",
+       "17      18          90         72.0    10791            4            5   \n",
+       "18      19          20         66.0    13695            5            5   \n",
+       "19      20          20         70.0     7560            5            6   \n",
+       "20      21          60        101.0    14215            8            5   \n",
+       "21      22          45         57.0     7449            7            7   \n",
+       "22      23          20         75.0     9742            8            5   \n",
+       "23      24         120         44.0     4224            5            7   \n",
+       "24      25          20         69.0     8246            5            8   \n",
+       "25      26          20        110.0    14230            8            5   \n",
+       "26      27          20         60.0     7200            5            7   \n",
+       "27      28          20         98.0    11478            8            5   \n",
+       "28      29          20         47.0    16321            5            6   \n",
+       "29      30          30         60.0     6324            4            6   \n",
+       "...    ...         ...          ...      ...          ...          ...   \n",
+       "1430  1431          60         60.0    21930            5            5   \n",
+       "1431  1432         120         69.0     4928            6            6   \n",
+       "1432  1433          30         60.0    10800            4            6   \n",
+       "1433  1434          60         93.0    10261            6            5   \n",
+       "1434  1435          20         80.0    17400            5            5   \n",
+       "1435  1436          20         80.0     8400            6            9   \n",
+       "1436  1437          20         60.0     9000            4            6   \n",
+       "1437  1438          20         96.0    12444            8            5   \n",
+       "1438  1439          20         90.0     7407            6            7   \n",
+       "1439  1440          60         80.0    11584            7            6   \n",
+       "1440  1441          70         79.0    11526            6            7   \n",
+       "1441  1442         120         69.0     4426            6            5   \n",
+       "1442  1443          60         85.0    11003           10            5   \n",
+       "1443  1444          30         69.0     8854            6            6   \n",
+       "1444  1445          20         63.0     8500            7            5   \n",
+       "1445  1446          85         70.0     8400            6            5   \n",
+       "1446  1447          20         69.0    26142            5            7   \n",
+       "1447  1448          60         80.0    10000            8            5   \n",
+       "1448  1449          50         70.0    11767            4            7   \n",
+       "1449  1450         180         21.0     1533            5            7   \n",
+       "1450  1451          90         60.0     9000            5            5   \n",
+       "1451  1452          20         78.0     9262            8            5   \n",
+       "1452  1453         180         35.0     3675            5            5   \n",
+       "1453  1454          20         90.0    17217            5            5   \n",
+       "1454  1455          20         62.0     7500            7            5   \n",
+       "1455  1456          60         62.0     7917            6            5   \n",
+       "1456  1457          20         85.0    13175            6            6   \n",
+       "1457  1458          70         66.0     9042            7            9   \n",
+       "1458  1459          20         68.0     9717            5            6   \n",
+       "1459  1460          20         75.0     9937            5            6   \n",
+       "\n",
+       "      YearBuilt  YearRemodAdd  MasVnrArea  BsmtFinSF1  ...  SaleType_ConLw  \\\n",
+       "0          2003          2003       196.0         706  ...               0   \n",
+       "1          1976          1976         0.0         978  ...               0   \n",
+       "2          2001          2002       162.0         486  ...               0   \n",
+       "3          1915          1970         0.0         216  ...               0   \n",
+       "4          2000          2000       350.0         655  ...               0   \n",
+       "5          1993          1995         0.0         732  ...               0   \n",
+       "6          2004          2005       186.0        1369  ...               0   \n",
+       "7          1973          1973       240.0         859  ...               0   \n",
+       "8          1931          1950         0.0           0  ...               0   \n",
+       "9          1939          1950         0.0         851  ...               0   \n",
+       "10         1965          1965         0.0         906  ...               0   \n",
+       "11         2005          2006       286.0         998  ...               0   \n",
+       "12         1962          1962         0.0         737  ...               0   \n",
+       "13         2006          2007       306.0           0  ...               0   \n",
+       "14         1960          1960       212.0         733  ...               0   \n",
+       "15         1929          2001         0.0           0  ...               0   \n",
+       "16         1970          1970       180.0         578  ...               0   \n",
+       "17         1967          1967         0.0           0  ...               0   \n",
+       "18         2004          2004         0.0         646  ...               0   \n",
+       "19         1958          1965         0.0         504  ...               0   \n",
+       "20         2005          2006       380.0           0  ...               0   \n",
+       "21         1930          1950         0.0           0  ...               0   \n",
+       "22         2002          2002       281.0           0  ...               0   \n",
+       "23         1976          1976         0.0         840  ...               0   \n",
+       "24         1968          2001         0.0         188  ...               0   \n",
+       "25         2007          2007       640.0           0  ...               0   \n",
+       "26         1951          2000         0.0         234  ...               0   \n",
+       "27         2007          2008       200.0        1218  ...               0   \n",
+       "28         1957          1997         0.0        1277  ...               0   \n",
+       "29         1927          1950         0.0           0  ...               0   \n",
+       "...         ...           ...         ...         ...  ...             ...   \n",
+       "1430       2005          2005         0.0           0  ...               0   \n",
+       "1431       1976          1976         0.0         958  ...               0   \n",
+       "1432       1927          2007         0.0           0  ...               0   \n",
+       "1433       2000          2000       318.0           0  ...               0   \n",
+       "1434       1977          1977         0.0         936  ...               0   \n",
+       "1435       1962          2005       237.0           0  ...               0   \n",
+       "1436       1971          1971         0.0         616  ...               0   \n",
+       "1437       2008          2008       426.0        1336  ...               0   \n",
+       "1438       1957          1996         0.0         600  ...               0   \n",
+       "1439       1979          1979        96.0         315  ...               0   \n",
+       "1440       1922          1994         0.0           0  ...               0   \n",
+       "1441       2004          2004       147.0         697  ...               0   \n",
+       "1442       2008          2008       160.0         765  ...               0   \n",
+       "1443       1916          1950         0.0           0  ...               0   \n",
+       "1444       2004          2004       106.0           0  ...               0   \n",
+       "1445       1966          1966         0.0         187  ...               0   \n",
+       "1446       1962          1962       189.0         593  ...               0   \n",
+       "1447       1995          1996       438.0        1079  ...               0   \n",
+       "1448       1910          2000         0.0           0  ...               0   \n",
+       "1449       1970          1970         0.0         553  ...               0   \n",
+       "1450       1974          1974         0.0           0  ...               0   \n",
+       "1451       2008          2009       194.0           0  ...               0   \n",
+       "1452       2005          2005        80.0         547  ...               0   \n",
+       "1453       2006          2006         0.0           0  ...               0   \n",
+       "1454       2004          2005         0.0         410  ...               0   \n",
+       "1455       1999          2000         0.0           0  ...               0   \n",
+       "1456       1978          1988       119.0         790  ...               0   \n",
+       "1457       1941          2006         0.0         275  ...               0   \n",
+       "1458       1950          1996         0.0          49  ...               0   \n",
+       "1459       1965          1965         0.0         830  ...               0   \n",
+       "\n",
+       "      SaleType_New  SaleType_Oth  SaleType_WD  SaleCondition_Abnorml  \\\n",
+       "0                0             0            1                      0   \n",
+       "1                0             0            1                      0   \n",
+       "2                0             0            1                      0   \n",
+       "3                0             0            1                      1   \n",
+       "4                0             0            1                      0   \n",
+       "5                0             0            1                      0   \n",
+       "6                0             0            1                      0   \n",
+       "7                0             0            1                      0   \n",
+       "8                0             0            1                      1   \n",
+       "9                0             0            1                      0   \n",
+       "10               0             0            1                      0   \n",
+       "11               1             0            0                      0   \n",
+       "12               0             0            1                      0   \n",
+       "13               1             0            0                      0   \n",
+       "14               0             0            1                      0   \n",
+       "15               0             0            1                      0   \n",
+       "16               0             0            1                      0   \n",
+       "17               0             0            1                      0   \n",
+       "18               0             0            1                      0   \n",
+       "19               0             0            0                      1   \n",
+       "20               1             0            0                      0   \n",
+       "21               0             0            1                      0   \n",
+       "22               0             0            1                      0   \n",
+       "23               0             0            1                      0   \n",
+       "24               0             0            1                      0   \n",
+       "25               0             0            1                      0   \n",
+       "26               0             0            1                      0   \n",
+       "27               0             0            1                      0   \n",
+       "28               0             0            1                      0   \n",
+       "29               0             0            1                      0   \n",
+       "...            ...           ...          ...                    ...   \n",
+       "1430             0             0            1                      0   \n",
+       "1431             0             0            1                      0   \n",
+       "1432             0             0            1                      0   \n",
+       "1433             0             0            1                      0   \n",
+       "1434             0             0            1                      0   \n",
+       "1435             0             0            0                      1   \n",
+       "1436             0             0            1                      0   \n",
+       "1437             1             0            0                      0   \n",
+       "1438             0             0            1                      0   \n",
+       "1439             0             0            1                      0   \n",
+       "1440             0             0            1                      0   \n",
+       "1441             0             0            1                      0   \n",
+       "1442             0             0            1                      0   \n",
+       "1443             0             0            1                      0   \n",
+       "1444             0             0            1                      0   \n",
+       "1445             0             0            1                      0   \n",
+       "1446             0             0            1                      0   \n",
+       "1447             0             0            1                      0   \n",
+       "1448             0             0            1                      0   \n",
+       "1449             0             0            1                      1   \n",
+       "1450             0             0            1                      0   \n",
+       "1451             1             0            0                      0   \n",
+       "1452             0             0            1                      0   \n",
+       "1453             0             0            1                      1   \n",
+       "1454             0             0            1                      0   \n",
+       "1455             0             0            1                      0   \n",
+       "1456             0             0            1                      0   \n",
+       "1457             0             0            1                      0   \n",
+       "1458             0             0            1                      0   \n",
+       "1459             0             0            1                      0   \n",
+       "\n",
+       "      SaleCondition_AdjLand  SaleCondition_Alloca  SaleCondition_Family  \\\n",
+       "0                         0                     0                     0   \n",
+       "1                         0                     0                     0   \n",
+       "2                         0                     0                     0   \n",
+       "3                         0                     0                     0   \n",
+       "4                         0                     0                     0   \n",
+       "5                         0                     0                     0   \n",
+       "6                         0                     0                     0   \n",
+       "7                         0                     0                     0   \n",
+       "8                         0                     0                     0   \n",
+       "9                         0                     0                     0   \n",
+       "10                        0                     0                     0   \n",
+       "11                        0                     0                     0   \n",
+       "12                        0                     0                     0   \n",
+       "13                        0                     0                     0   \n",
+       "14                        0                     0                     0   \n",
+       "15                        0                     0                     0   \n",
+       "16                        0                     0                     0   \n",
+       "17                        0                     0                     0   \n",
+       "18                        0                     0                     0   \n",
+       "19                        0                     0                     0   \n",
+       "20                        0                     0                     0   \n",
+       "21                        0                     0                     0   \n",
+       "22                        0                     0                     0   \n",
+       "23                        0                     0                     0   \n",
+       "24                        0                     0                     0   \n",
+       "25                        0                     0                     0   \n",
+       "26                        0                     0                     0   \n",
+       "27                        0                     0                     0   \n",
+       "28                        0                     0                     0   \n",
+       "29                        0                     0                     0   \n",
+       "...                     ...                   ...                   ...   \n",
+       "1430                      0                     0                     0   \n",
+       "1431                      0                     0                     0   \n",
+       "1432                      0                     0                     0   \n",
+       "1433                      0                     0                     0   \n",
+       "1434                      0                     0                     0   \n",
+       "1435                      0                     0                     0   \n",
+       "1436                      0                     0                     0   \n",
+       "1437                      0                     0                     0   \n",
+       "1438                      0                     0                     0   \n",
+       "1439                      0                     0                     0   \n",
+       "1440                      0                     0                     0   \n",
+       "1441                      0                     0                     0   \n",
+       "1442                      0                     0                     0   \n",
+       "1443                      0                     0                     0   \n",
+       "1444                      0                     0                     0   \n",
+       "1445                      0                     0                     0   \n",
+       "1446                      0                     0                     0   \n",
+       "1447                      0                     0                     0   \n",
+       "1448                      0                     0                     0   \n",
+       "1449                      0                     0                     0   \n",
+       "1450                      0                     0                     0   \n",
+       "1451                      0                     0                     0   \n",
+       "1452                      0                     0                     0   \n",
+       "1453                      0                     0                     0   \n",
+       "1454                      0                     0                     0   \n",
+       "1455                      0                     0                     0   \n",
+       "1456                      0                     0                     0   \n",
+       "1457                      0                     0                     0   \n",
+       "1458                      0                     0                     0   \n",
+       "1459                      0                     0                     0   \n",
+       "\n",
+       "      SaleCondition_Normal  SaleCondition_Partial  \n",
+       "0                        1                      0  \n",
+       "1                        1                      0  \n",
+       "2                        1                      0  \n",
+       "3                        0                      0  \n",
+       "4                        1                      0  \n",
+       "5                        1                      0  \n",
+       "6                        1                      0  \n",
+       "7                        1                      0  \n",
+       "8                        0                      0  \n",
+       "9                        1                      0  \n",
+       "10                       1                      0  \n",
+       "11                       0                      1  \n",
+       "12                       1                      0  \n",
+       "13                       0                      1  \n",
+       "14                       1                      0  \n",
+       "15                       1                      0  \n",
+       "16                       1                      0  \n",
+       "17                       1                      0  \n",
+       "18                       1                      0  \n",
+       "19                       0                      0  \n",
+       "20                       0                      1  \n",
+       "21                       1                      0  \n",
+       "22                       1                      0  \n",
+       "23                       1                      0  \n",
+       "24                       1                      0  \n",
+       "25                       1                      0  \n",
+       "26                       1                      0  \n",
+       "27                       1                      0  \n",
+       "28                       1                      0  \n",
+       "29                       1                      0  \n",
+       "...                    ...                    ...  \n",
+       "1430                     1                      0  \n",
+       "1431                     1                      0  \n",
+       "1432                     1                      0  \n",
+       "1433                     1                      0  \n",
+       "1434                     1                      0  \n",
+       "1435                     0                      0  \n",
+       "1436                     1                      0  \n",
+       "1437                     0                      1  \n",
+       "1438                     1                      0  \n",
+       "1439                     1                      0  \n",
+       "1440                     1                      0  \n",
+       "1441                     1                      0  \n",
+       "1442                     1                      0  \n",
+       "1443                     1                      0  \n",
+       "1444                     1                      0  \n",
+       "1445                     1                      0  \n",
+       "1446                     1                      0  \n",
+       "1447                     1                      0  \n",
+       "1448                     1                      0  \n",
+       "1449                     0                      0  \n",
+       "1450                     1                      0  \n",
+       "1451                     0                      1  \n",
+       "1452                     1                      0  \n",
+       "1453                     0                      0  \n",
+       "1454                     1                      0  \n",
+       "1455                     1                      0  \n",
+       "1456                     1                      0  \n",
+       "1457                     1                      0  \n",
+       "1458                     1                      0  \n",
+       "1459                     1                      0  \n",
+       "\n",
+       "[1460 rows x 305 columns]"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y = X['SalePrice']/10000\n",
+    "X = X.drop(['Id','SalePrice'],axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.metrics import mean_squared_error"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# LinearRegression"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.linear_model import LinearRegression\n",
+    "from sklearn.metrics import mean_squared_error"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lm=LinearRegression()\n",
+    "lm.fit(X_train,y_train)\n",
+    "pred=lm.predict(X_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.1689446485368255e-05"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.sqrt(mean_squared_error(y_test,pred))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.009952692244139315"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.sqrt(mean_squared_error(np.log(y_test),np.log(pred)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Preprocessing"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.pipeline import make_pipeline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import RobustScaler"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lm_model=make_pipeline(RobustScaler(),LinearRegression())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {
+    "scrolled": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pipeline(memory=None,\n",
+       "     steps=[('robustscaler', RobustScaler(copy=True, quantile_range=(25.0, 75.0), with_centering=True,\n",
+       "       with_scaling=True)), ('linearregression', LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None,\n",
+       "         normalize=False))])"
+      ]
+     },
+     "execution_count": 42,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "lm_model.fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def benchmark(model):\n",
+    "    pred=model.predict(X_test)\n",
+    "    logrmse=np.sqrt(mean_squared_error(np.log(y_test),np.log(pred)))\n",
+    "    return logrmse"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def benchmark1(model,testset,label):\n",
+    "    pred=model.predict(testset)\n",
+    "    if pred[pred<0].shape[0]>0 :\n",
+    "        print('Neg Value')\n",
+    "    rmse=np.sqrt(mean_squared_error(label,pred))\n",
+    "    lrmse=np.sqrt(mean_squared_error(np.log(label),np.log(pred)))\n",
+    "\n",
+    "    print('RMSE:',rmse)\n",
+    "    print('LRMSE:',lrmse)\n",
+    "    return lrmse"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# benchmark(lm_model)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# RidgeRegression"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.linear_model import Ridge"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ridge_model=Ridge(alpha=46)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Ridge(alpha=46, copy_X=True, fit_intercept=True, max_iter=None,\n",
+       "   normalize=False, random_state=None, solver='auto', tol=0.001)"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ridge_model.fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 49,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 1.0518244875908769e-05\n",
+      "LRMSE: 0.008891083668498997\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.008891083668498997"
+      ]
+     },
+     "execution_count": 49,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(ridge_model,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Lasso Regression"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.linear_model import LassoCV"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import KFold"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kfolds=KFold(n_splits=10,shuffle=True,random_state=123)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l_alphas=np.logspace(-10,2.8,150)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lasso_model=make_pipeline(RobustScaler(),\n",
+    "                           LassoCV(alphas=l_alphas,\n",
+    "                                   cv=kfolds)).fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 1.0121113897456504e-05\n",
+      "LRMSE: 0.00857740670031837\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.00857740670031837"
+      ]
+     },
+     "execution_count": 55,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(lasso_model,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# ElasticNet"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.linear_model import ElasticNetCV"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "e_l1ratio=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.85,0.9,0.95,1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "e_alphas=l_alphas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "elastic_model2=make_pipeline(RobustScaler(),\n",
+    "                             ElasticNetCV(alphas=e_alphas,l1_ratio=e_l1ratio)).fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 1.0121113897456504e-05\n",
+      "LRMSE: 0.00857740670031837\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.00857740670031837"
+      ]
+     },
+     "execution_count": 60,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(elastic_model2,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Random Forest"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.ensemble import RandomForestRegressor"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rf_model = RandomForestRegressor(n_estimators=800,\n",
+    "                                 max_depth=35,\n",
+    "                                 min_samples_leaf=1,\n",
+    "                                 random_state=123\n",
+    "                                ) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=35,\n",
+       "           max_features='auto', max_leaf_nodes=None,\n",
+       "           min_impurity_decrease=0.0, min_impurity_split=None,\n",
+       "           min_samples_leaf=1, min_samples_split=2,\n",
+       "           min_weight_fraction_leaf=0.0, n_estimators=800, n_jobs=None,\n",
+       "           oob_score=False, random_state=123, verbose=0, warm_start=False)"
+      ]
+     },
+     "execution_count": 63,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "rf_model.fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 3.855212928788273e-05\n",
+      "LRMSE: 0.031965303492385036\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.031965303492385036"
+      ]
+     },
+     "execution_count": 64,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(rf_model,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# XGBoost"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import xgboost as xgb"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "xgboost=make_pipeline(RobustScaler(),\n",
+    "                      xgb.XGBRegressor(objective='reg:linear',\n",
+    "                                       subsample=0.8,\n",
+    "                                       n_estimators=800,\n",
+    "                                       learning_rate=0.05,\n",
+    "                                       random_state=123))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[15:04:53] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "Pipeline(memory=None,\n",
+       "     steps=[('robustscaler', RobustScaler(copy=True, quantile_range=(25.0, 75.0), with_centering=True,\n",
+       "       with_scaling=True)), ('xgbregressor', XGBRegressor(base_score=0.5, booster='gbtree', colsample_bylevel=1,\n",
+       "       colsample_bynode=1, colsample_bytree=1, gamma=0,\n",
+       "       importance_type='gain', le...ha=0, reg_lambda=1, scale_pos_weight=1, seed=None,\n",
+       "       silent=None, subsample=0.8, verbosity=1))])"
+      ]
+     },
+     "execution_count": 67,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xgboost.fit(X_train,y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 3.856771953746572e-05\n",
+      "LRMSE: 0.03197230516600616\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.03197230516600616"
+      ]
+     },
+     "execution_count": 68,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(xgboost,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Stacking"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Level 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "from mlxtend.regressor import StackingCVRegressor"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.linear_model import RidgeCV"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "alphas_alt=np.logspace(-10,2.8,150)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ridge=make_pipeline(RobustScaler(),RidgeCV(alphas=alphas_alt,cv=5))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "lasso=make_pipeline(RobustScaler(),LassoCV(alphas=alphas_alt,cv=5))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "elasticnet=make_pipeline(RobustScaler(),ElasticNetCV(alphas=e_alphas,cv=5,l1_ratio=e_l1ratio))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "xgboost=make_pipeline(RobustScaler(),xgb.XGBRegressor(objective='reg:linear',colsample_bytree=0.7,learning_rate=0.1,max_depth=3,n_estimators=560,subsample=0.7,reg_alpha=0.00006,gamma=0,nthread=6,scale_pos_weight=1,seed=27))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Level 2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stack=StackingCVRegressor(regressors=(ridge,lasso,elasticnet,xgboost),meta_regressor=xgboost,use_features_in_secondary=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stackX=np.array(X_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stacky=np.array(y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/anaconda3/lib/python3.7/site-packages/sklearn/model_selection/_search.py:841: DeprecationWarning: The default of the `iid` parameter will change from True to False in version 0.22 and will be removed in 0.24. This will change numeric results when test-set sizes are unequal.\n",
+      "  DeprecationWarning)\n",
+      "/anaconda3/lib/python3.7/site-packages/sklearn/model_selection/_search.py:841: DeprecationWarning: The default of the `iid` parameter will change from True to False in version 0.22 and will be removed in 0.24. This will change numeric results when test-set sizes are unequal.\n",
+      "  DeprecationWarning)\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[15:09:00] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:09:02] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:09:05] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:09:08] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:09:10] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:09:13] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n",
+      "[15:10:02] WARNING: src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "StackingCVRegressor(cv=5,\n",
+       "          meta_regressor=Pipeline(memory=None,\n",
+       "     steps=[('robustscaler', RobustScaler(copy=True, quantile_range=(25.0, 75.0), with_centering=True,\n",
+       "       with_scaling=True)), ('xgbregressor', XGBRegressor(base_score=0.5, booster='gbtree', colsample_bylevel=1,\n",
+       "       colsample_bynode=1, colsample_bytree=0.7, gamma=0,\n",
+       "       importance_type='gain', ...=6e-05, reg_lambda=1, scale_pos_weight=1, seed=27,\n",
+       "       silent=None, subsample=0.7, verbosity=1))]),\n",
+       "          n_jobs=None, pre_dispatch='2*n_jobs', random_state=None,\n",
+       "          refit=True,\n",
+       "          regressors=(Pipeline(memory=None,\n",
+       "     steps=[('robustscaler', RobustScaler(copy=True, quantile_range=(25.0, 75.0), with_centering=True,\n",
+       "       with_scaling=True)), ('ridgecv', RidgeCV(alphas=array([1.00000e-10, 1.21873e-10, ..., 5.17719e+02, 6.30957e+02]),\n",
+       "    cv=5, fit_intercept=True, gcv_mode=Non...e-05, reg_lambda=1, scale_pos_weight=1, seed=27,\n",
+       "       silent=None, subsample=0.7, verbosity=1))])),\n",
+       "          shuffle=True, store_train_meta_features=False,\n",
+       "          use_features_in_secondary=False, verbose=0)"
+      ]
+     },
+     "execution_count": 79,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "stack.fit(stackX,stacky)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 3.854979398954311e-05\n",
+      "LRMSE: 0.03196448434202707\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.03196448434202707"
+      ]
+     },
+     "execution_count": 80,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "benchmark1(stack,X_test,y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# DNN"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "Using TensorFlow backend.\n"
+     ]
+    }
+   ],
+   "source": [
+    "import keras"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 82,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import tensorflow as tf "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 83,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from keras.models import Sequential"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 84,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from keras.layers import Dense,Dropout\n",
+    "from keras.layers import BatchNormalization"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from keras import metrics"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 86,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from keras import backend as K"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 107,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def create_model():\n",
+    "    model=Sequential()\n",
+    "    model.add(Dense(10,input_dim=X_train.shape[1],activation='relu'))\n",
+    "    model.add(Dense(300,activation='relu'))\n",
+    "    model.add(BatchNormalization())\n",
+    "    model.add(Dense(150,activation='relu'))\n",
+    "    model.add(BatchNormalization())\n",
+    "    model.add(Dense(50,activation='relu'))\n",
+    "    model.add(BatchNormalization())\n",
+    "    model.add(Dropout(0.2))\n",
+    "    model.add(Dense(1))\n",
+    "    return model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 108,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "_________________________________________________________________\n",
+      "Layer (type)                 Output Shape              Param #   \n",
+      "=================================================================\n",
+      "dense_6 (Dense)              (None, 10)                3040      \n",
+      "_________________________________________________________________\n",
+      "dense_7 (Dense)              (None, 300)               3300      \n",
+      "_________________________________________________________________\n",
+      "batch_normalization_4 (Batch (None, 300)               1200      \n",
+      "_________________________________________________________________\n",
+      "dense_8 (Dense)              (None, 150)               45150     \n",
+      "_________________________________________________________________\n",
+      "batch_normalization_5 (Batch (None, 150)               600       \n",
+      "_________________________________________________________________\n",
+      "dense_9 (Dense)              (None, 50)                7550      \n",
+      "_________________________________________________________________\n",
+      "batch_normalization_6 (Batch (None, 50)                200       \n",
+      "_________________________________________________________________\n",
+      "dropout_1 (Dropout)          (None, 50)                0         \n",
+      "_________________________________________________________________\n",
+      "dense_10 (Dense)             (None, 1)                 51        \n",
+      "=================================================================\n",
+      "Total params: 61,091\n",
+      "Trainable params: 60,091\n",
+      "Non-trainable params: 1,000\n",
+      "_________________________________________________________________\n"
+     ]
+    }
+   ],
+   "source": [
+    "model.summary()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 109,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 110,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model=create_model()\n",
+    "model.compile(optimizer='adam',loss='mean_squared_error')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 111,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "history=model.fit(X_train,y_train,epochs=400,batch_size=32,verbose=0,validation_data=(X_test,y_test))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 112,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x1a41642160>]"
+      ]
+     },
+     "execution_count": 112,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "plt.plot(history.history['loss'])#训练Loss"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Bagging提交"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 114,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn import ensemble"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 119,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "bagging_alg=[\n",
+    "    ('Lasso',Lasso(),\n",
+    "    ('Ridge',Ridge()),\n",
+    "    ('ElasticNet',ElasticNetCV()),\n",
+    "    ('RF',RandomForestRegressor()),\n",
+    "    ('xgb',xgb.XGBRegressor()),\n",
+    "    ('stacking',StackingCVRegressor(regressors=(ridge,lasso,elasticnet,xgboost),meta_regressor=xgboost)),\n",
+    "    ('DNN',model)\n",
+    "]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 145,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "bagging_regressor = ensemble.BaggingRegressor(base_estimator=bagging_alg,n_estimators=7,max_samples=0.8,random_state=123)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  },
+  "toc": {
+   "base_numbering": 1,
+   "nav_menu": {},
+   "number_sections": true,
+   "sideBar": true,
+   "skip_h1_title": false,
+   "title_cell": "Table of Contents",
+   "title_sidebar": "Contents",
+   "toc_cell": false,
+   "toc_position": {},
+   "toc_section_display": true,
+   "toc_window_display": true
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
